@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>SIP Calculator</title>
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --accent:#5b7cfa;
+      --accent2:#22c55e;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius:16px;
+      --fieldbg: rgba(16,31,54,.55);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(91,124,250,.25), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      padding: 28px 14px;
+    }
+    .wrap{ max-width: 980px; margin: 0 auto; display:grid; gap:16px; }
+    header{ padding: 6px 4px 0; }
+    h1{ font-size: 28px; margin:0; letter-spacing:.2px; }
+    .subtitle{ color: var(--muted); font-size: 14px; margin-top:6px; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:16px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.18);
+      font-weight: 800;
+      letter-spacing:.2px;
+    }
+    .panelBody{ padding: 16px; }
+
+    .form{ display:grid; gap: 12px; }
+
+    /* Your requested "line layout" */
+    .line{ display:grid; gap:12px; }
+    .line.two{ grid-template-columns: 1fr 1fr; }
+    @media (max-width: 520px){
+      .line.two{ grid-template-columns: 1fr; }
+    }
+
+    .field{ display:grid; gap: 7px; }
+    .field label{ color: var(--muted); font-size: 13px; }
+
+    .inputWrap{ position:relative; }
+    .prefix{
+      position:absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(234,240,255,.75);
+      font-size: 14px; pointer-events:none;
+    }
+
+    input, select{
+      width:100%;
+      padding: 12px 12px 12px 36px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: var(--fieldbg);
+      color: var(--text);
+      font-size: 15px;
+      outline:none;
+    }
+    select{ padding-left: 12px; } /* no prefix for selects */
+    input:focus, select:focus{
+      border-color: rgba(91,124,250,.65);
+      box-shadow: 0 0 0 4px rgba(91,124,250,.15);
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top: 6px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 800;
+      cursor:pointer;
+      font-size: 14px;
+      transition: transform .05s ease, filter .15s ease;
+    }
+    button:active{ transform: translateY(1px); }
+    .btnPrimary{
+      background: linear-gradient(135deg, rgba(91,124,250,1), rgba(91,124,250,.75));
+      color:white;
+    }
+    .btnGhost{
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .disclaimer{
+      margin-top: 10px;
+      color: rgba(234,240,255,.65);
+      font-size: 12px;
+      line-height: 1.4;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255,255,255,.16);
+      background: rgba(0,0,0,.12);
+    }
+
+    /* Results */
+    .resultStack{ display:grid; gap: 12px; }
+    .highlight{
+      background: radial-gradient(700px 220px at 15% 0%, rgba(91,124,250,.35), transparent 55%),
+                  radial-gradient(700px 240px at 90% 40%, rgba(34,197,94,.22), transparent 60%),
+                  rgba(16,31,54,.55);
+      border: 1px solid rgba(91,124,250,.35);
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+    }
+    .pill{
+      display:inline-flex; align-items:center;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(34,197,94,.16);
+      border: 1px solid rgba(34,197,94,.32);
+      color: rgba(220,255,235,.95);
+      font-weight: 900; font-size: 12px;
+      gap:6px;
+    }
+    .moneyBig{ font-size: 34px; font-weight: 950; margin-top: 8px; line-height: 1.05; }
+    .mutedLine{ color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+    .miniCards{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px){
+      .miniCards{ grid-template-columns:1fr; }
+    }
+    .mini{
+      background: rgba(16,31,54,.45);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .mini .k{
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing:.14em;
+    }
+    .mini .v{ margin-top: 6px; font-weight: 950; font-size: 18px; }
+
+    .hidden{ display:none; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>SIP Calculator</h1>
+    </header>
+
+    <div class="grid">
+      <!-- INPUTS -->
+      <section class="panel">
+        <div class="panelHead">Inputs</div>
+        <div class="panelBody">
+          <div class="form">
+
+            <!-- Line 1: Lump Sum -->
+            <div class="line">
+              <div class="field">
+                <label for="lumpSum">Lump Sum</label>
+                <div class="inputWrap">
+                  <div class="prefix">₹</div>
+                  <input type="number" id="lumpSum" value="0" min="0" inputmode="decimal" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Line 2: Regular Deposit Amount, Deposit Frequency -->
+            <div class="line two">
+              <div class="field">
+                <label for="depositAmount">Regular Deposit Amount</label>
+                <div class="inputWrap">
+                  <div class="prefix">₹</div>
+                  <input type="number" id="depositAmount" placeholder="e.g., 2000" min="0" inputmode="decimal" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="depositFreq">Deposit Frequency</label>
+                <select id="depositFreq">
+                  <option value="monthly" selected>Monthly</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="halfYearly">Half Yearly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Line 3: Increase/Decrease, Step-up Unit -->
+            <div class="line two">
+              <div class="field">
+                <label for="stepUpValue">Increase/Decrease Deposit Every Year</label>
+                <div class="inputWrap">
+                  <div class="prefix">±</div>
+                  <input type="number" id="stepUpValue" value="0" inputmode="decimal" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="stepUpUnit">Step-up Unit</label>
+                <select id="stepUpUnit">
+                  <option value="rupees">Rupees</option>
+                  <option value="percent" selected>Percentage (%)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Line 4: Term, Term Unit -->
+            <div class="line two">
+              <div class="field">
+                <label for="termValue">Term</label>
+                <div class="inputWrap">
+                  <div class="prefix">#</div>
+                  <input type="number" id="termValue" placeholder="e.g., 20" min="0" inputmode="numeric" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="termUnit">Term Unit</label>
+                <select id="termUnit">
+                  <option value="years" selected>Years</option>
+                  <option value="months">Months</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Line 5: Expected Return -->
+            <div class="line">
+              <div class="field">
+                <label for="rate">Expected Return (%)</label>
+                <div class="inputWrap">
+                  <div class="prefix">%</div>
+                  <input type="number" id="rate" placeholder="e.g., 12" min="0" inputmode="decimal" />
+                </div>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btnPrimary" onclick="calculateSIP()">Calculate</button>
+              <button class="btnGhost" onclick="resetForm()">Reset</button>
+            </div>
+
+          </div>
+
+          <div class="disclaimer">
+            SIP returns are not guaranteed and may vary based on market conditions.
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section class="panel">
+        <div class="panelHead">Results</div>
+        <div class="panelBody">
+          <div id="result" class="resultStack hidden">
+            <div class="highlight">
+              <span class="pill">⭐ Maturity Amount</span>
+              <div class="moneyBig" id="maturityText">Rs. 0.00</div>
+              <div class="mutedLine" id="investedHint">Total invested: Rs. 0.00</div>
+            </div>
+
+            <div class="miniCards">
+              <div class="mini">
+                <div class="k">Total Deposits</div>
+                <div class="v" id="depositText">Rs. 0.00</div>
+              </div>
+              <div class="mini">
+                <div class="k">Total Returns</div>
+                <div class="v" id="returnsText">Rs. 0.00</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="emptyState" class="mutedLine">
+            Enter values and hit <b>Calculate</b>.
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    function formatINR(value) {
+      return "Rs. " + new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+    }
+
+    // frequency -> deposits per year (n) and spacing in months (p)
+    function getFrequencyConfig(freq) {
+      switch (freq) {
+        case "monthly": return { n: 12, p: 1 };
+        case "quarterly": return { n: 4, p: 3 };
+        case "halfYearly": return { n: 2, p: 6 };
+        case "yearly": return { n: 1, p: 12 };
+        default: return { n: 12, p: 1 };
+      }
+    }
+
+    // For a full year: deposits at months 0, p, 2p... (n-1)p
+    // average remaining months to end-of-year = 12 - p*(n-1)/2
+    function avgRemainingMonthsFullYear(n, p) {
+      return 12 - (p * (n - 1) / 2);
+    }
+
+    // Partial year (remMonths): deposits at months 0, p, 2p... < remMonths
+    function depositCountPartial(remMonths, p) {
+      if (remMonths <= 0) return 0;
+      return Math.floor((remMonths - 1) / p) + 1;
+    }
+    function avgRemainingMonthsPartial(remMonths, p) {
+      if (remMonths <= 0) return 0;
+      const count = depositCountPartial(remMonths, p);
+      return remMonths - (p * (count - 1) / 2);
+    }
+
+    function applyStepUp(depPerPeriod, stepUpValue, stepUpUnit) {
+      if (stepUpUnit === "rupees") return depPerPeriod + stepUpValue;
+      return depPerPeriod * (1 + stepUpValue / 100);
+    }
+
+    function calculateSIP() {
+      const lumpSum = parseFloat(document.getElementById("lumpSum").value) || 0;
+      const depositPerPeriod0 = parseFloat(document.getElementById("depositAmount").value) || 0;
+
+      const freq = document.getElementById("depositFreq").value;
+      const stepUpValue = parseFloat(document.getElementById("stepUpValue").value) || 0;
+      const stepUpUnit = document.getElementById("stepUpUnit").value;
+
+      const termValue = parseInt(document.getElementById("termValue").value) || 0;
+      const termUnit = document.getElementById("termUnit").value;
+
+      const annualRate = parseFloat(document.getElementById("rate").value) || 0;
+
+      if (annualRate <= 0 || termValue <= 0 || depositPerPeriod0 <= 0) {
+        alert("Please enter Regular Deposit Amount, Expected Return (%), and Term.");
+        return;
+      }
+
+      const { n, p } = getFrequencyConfig(freq);
+      const r = annualRate / 100;
+
+      // Convert term into total months
+      const totalMonths = (termUnit === "years") ? (termValue * 12) : termValue;
+      const fullYears = Math.floor(totalMonths / 12);
+      const remMonths = totalMonths % 12;
+
+      // TOTAL DEPOSITS
+      let totalDeposits = lumpSum;
+      let depPerPeriod = depositPerPeriod0;
+
+      for (let y = 0; y < fullYears; y++) {
+        totalDeposits += depPerPeriod * n;
+        depPerPeriod = applyStepUp(depPerPeriod, stepUpValue, stepUpUnit);
+      }
+      if (remMonths > 0) {
+        const cnt = depositCountPartial(remMonths, p);
+        totalDeposits += depPerPeriod * cnt;
+      }
+
+      // CORPUS (APP-STYLE)
+      let corpus = lumpSum;
+      depPerPeriod = depositPerPeriod0;
+
+      for (let y = 0; y < fullYears; y++) {
+        corpus *= (1 + r);
+
+        const avgMonths = avgRemainingMonthsFullYear(n, p);
+        const yearDeposit = depPerPeriod * n;
+        corpus += yearDeposit * (1 + r * (avgMonths / 12));
+
+        depPerPeriod = applyStepUp(depPerPeriod, stepUpValue, stepUpUnit);
+      }
+
+      if (remMonths > 0) {
+        corpus *= (1 + r * (remMonths / 12));
+
+        const cnt = depositCountPartial(remMonths, p);
+        const avgRem = avgRemainingMonthsPartial(remMonths, p);
+        const partDeposit = depPerPeriod * cnt;
+        corpus += partDeposit * (1 + r * (avgRem / 12));
+      }
+
+      const totalReturns = corpus - totalDeposits;
+
+      document.getElementById("result").classList.remove("hidden");
+      document.getElementById("emptyState").classList.add("hidden");
+
+      document.getElementById("maturityText").textContent = formatINR(corpus);
+      document.getElementById("depositText").textContent = formatINR(totalDeposits);
+      document.getElementById("returnsText").textContent = formatINR(totalReturns);
+      document.getElementById("investedHint").textContent = "Total invested: " + formatINR(totalDeposits);
+    }
+
+    function resetForm() {
+      document.getElementById("lumpSum").value = 0;
+      document.getElementById("depositAmount").value = "";
+      document.getElementById("depositFreq").value = "monthly";
+      document.getElementById("stepUpValue").value = 0;
+      document.getElementById("stepUpUnit").value = "percent";
+      document.getElementById("termValue").value = "";
+      document.getElementById("termUnit").value = "years";
+      document.getElementById("rate").value = "";
+
+      document.getElementById("result").classList.add("hidden");
+      document.getElementById("emptyState").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>

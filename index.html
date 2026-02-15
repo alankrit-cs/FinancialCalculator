@@ -7,82 +7,77 @@
 
   <style>
     :root{
-      --bg:#eef3ff;
-      --bg2:#e9fff7;
-      --text:#17213b;
-      --muted:#5d7099;
-      --accent:#4d6dff;
-      --accent2:#09a66d;
-      --accent3:#ff7d5c;
-      --panel:#ffffffcc;
-      --border:rgba(55,82,140,.22);
-      --field:#f8fbff;
-      --shadow:0 16px 44px rgba(56,83,141,.2);
-      --focus:rgba(77,109,255,.2);
-      --radius:18px;
-      --chartGrid:rgba(91,118,175,.16);
-      --lineA:#4d6dff;
-      --lineB:#09a66d;
-      --lineC:#ff7d5c;
-      --lineD:#7b5cff;
-    }
-    body.dark{
-      --bg:#0b1220;
-      --bg2:#102536;
-      --text:#eaf0ff;
-      --muted:#9fb0d0;
-      --accent:#5b7cfa;
-      --accent2:#22c55e;
-      --accent3:#fb8d65;
-      --panel:rgba(17,30,52,.86);
-      --border:rgba(255,255,255,.12);
-      --field:rgba(11,24,44,.8);
-      --shadow:0 22px 54px rgba(0,0,0,.5);
-      --focus:rgba(91,124,250,.24);
-      --chartGrid:rgba(255,255,255,.1);
-      --lineA:#7f9aff;
-      --lineB:#3ae88c;
-      --lineC:#ff9f83;
-      --lineD:#b69aff;
+      --bg:#edf2ff;
+      --muted:#5f6f94;
+      --text:#18213a;
+      --accent:#4a6bff;
+      --accent2:#12a66c;
+      --border:rgba(44,68,120,.20);
+      --shadow: 0 20px 48px rgba(61,84,137,.20);
+      --radius:16px;
+      --fieldbg: rgba(255,255,255,.78);
+      --panelTop: rgba(255,255,255,.84);
+      --panelBottom: rgba(239,245,255,.72);
+      --panelHead: rgba(236,243,255,.78);
+      --pillBg: rgba(18,166,108,.14);
+      --pillBorder: rgba(18,166,108,.28);
+      --pillText: #0f7e53;
+      --glowA: rgba(74,107,255,.24);
+      --glowB: rgba(18,166,108,.18);
+      --focus: rgba(74,107,255,.18);
+      --highlightBase: rgba(246,250,255,.94);
+      --prefix: rgba(52,77,128,.66);
     }
     *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(1200px 650px at 15% 0%, rgba(77,109,255,.25), transparent 62%),
-        radial-gradient(980px 520px at 90% 8%, rgba(9,166,109,.2), transparent 58%),
-        linear-gradient(165deg, var(--bg), var(--bg2));
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 600px at 20% 0%, var(--glowA), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, var(--glowB), transparent 55%),
+                  var(--bg);
       color:var(--text);
       min-height:100vh;
-      padding:20px 12px 24px;
+      padding: 28px 14px;
       transition: background .25s ease, color .25s ease;
     }
-    .wrap{ max-width:1200px; margin:0 auto; display:grid; gap:14px; }
-    .topBar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:14px 16px;
-      backdrop-filter: blur(8px);
+    body.dark{
+      --bg:#0b1220;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --accent:#5b7cfa;
+      --accent2:#22c55e;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --fieldbg: rgba(16,31,54,.55);
+      --panelTop: rgba(255,255,255,.06);
+      --panelBottom: rgba(255,255,255,.03);
+      --panelHead: rgba(0,0,0,.18);
+      --pillBg: rgba(34,197,94,.16);
+      --pillBorder: rgba(34,197,94,.32);
+      --pillText: rgba(220,255,235,.95);
+      --glowA: rgba(91,124,250,.25);
+      --glowB: rgba(34,197,94,.18);
+      --focus: rgba(91,124,250,.15);
+      --highlightBase: rgba(16,31,54,.55);
+      --prefix: rgba(234,240,255,.75);
     }
-    h1{ margin:0; font-size:26px; }
-    .sub{ color:var(--muted); font-size:13px; margin-top:4px; }
+    .wrap{ max-width: 980px; margin: 0 auto; display:grid; gap:16px; }
+    header{ padding: 6px 4px 0; }
+    .topBar{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    h1{ font-size: 28px; margin:0; letter-spacing:.2px; }
+    .subtitle{ color: var(--muted); font-size: 14px; margin-top:6px; }
     .themeToggle{
-      border:1px solid var(--border);
-      background:var(--field);
-      color:var(--text);
-      border-radius:12px;
-      padding:10px 12px;
-      font-weight:700;
-      cursor:pointer;
-      min-width:116px;
+      border: 1px solid var(--border);
+      background: var(--fieldbg);
+      color: var(--text);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      min-width: 118px;
+      justify-content: center;
     }
+    .themeToggle .icon{ font-size: 15px; }
 
     .grid{
       display:grid;
@@ -95,17 +90,27 @@
     }
 
     .panel{
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, var(--panelTop), var(--panelBottom));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
     }
     .panelHead{
-      padding:12px 14px;
-      border-bottom:1px solid var(--border);
-      font-weight:900;
-      letter-spacing:.03em;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panelHead);
+      font-weight: 800;
+      letter-spacing:.2px;
+    }
+    .panelBody{ padding: 16px; }
+
+    .form{ display:grid; gap: 12px; }
+
+    .line{ display:grid; gap:12px; }
+    .line.two{ grid-template-columns: 1fr 1fr; }
+    @media (max-width: 520px){
+      .line.two{ grid-template-columns: 1fr; }
     }
     .panelBody{ padding:14px; }
 
@@ -116,33 +121,85 @@
     .field{ display:grid; gap:6px; }
     .field label{ color:var(--muted); font-size:12px; font-weight:700; }
     .inputWrap{ position:relative; }
-    .prefix{ position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:13px; }
+    .prefix{
+      position:absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--prefix);
+      font-size: 14px; pointer-events:none;
+    }
+
     input, select{
       width:100%;
-      border:1px solid var(--border);
-      background:var(--field);
-      color:var(--text);
-      border-radius:12px;
-      font-size:14px;
-      padding:11px 12px 11px 34px;
+      padding: 12px 12px 12px 36px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--fieldbg);
+      color: var(--text);
+      font-size: 15px;
       outline:none;
     }
-    select{ padding-left:12px; }
-    input:focus, select:focus{ box-shadow:0 0 0 4px var(--focus); }
-    .actions{ display:flex; flex-wrap:wrap; gap:8px; margin-top:2px; }
-    button{ border:0; border-radius:12px; padding:11px 13px; font-weight:800; cursor:pointer; }
-    .btnPrimary{ background:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #ffffff)); color:white; }
-    .btnGhost{ background:var(--field); border:1px solid var(--border); color:var(--text); }
+    select{ padding-left: 12px; }
+    input:focus, select:focus{
+      border-color: rgba(91,124,250,.65);
+      box-shadow: 0 0 0 4px var(--focus);
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-    .dash{ display:grid; gap:10px; }
-    .resultRow{ display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px; }
-    @media (max-width:760px){ .resultRow{ grid-template-columns:1fr; } }
-    .metric{
-      background:var(--field);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:12px;
-      min-height:90px;
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top: 6px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 800;
+      cursor:pointer;
+      font-size: 14px;
+      transition: transform .05s ease, filter .15s ease;
+    }
+    button:active{ transform: translateY(1px); }
+    .btnPrimary{
+      background: linear-gradient(135deg, rgba(91,124,250,1), rgba(91,124,250,.75));
+      color:white;
+    }
+    .btnGhost{
+      background: var(--fieldbg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .disclaimer{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+      background: var(--panelBottom);
+    }
+
+    .resultStack{ display:grid; gap: 12px; }
+    .highlight{
+      background: radial-gradient(700px 220px at 15% 0%, rgba(91,124,250,.35), transparent 55%),
+                  radial-gradient(700px 240px at 90% 40%, rgba(34,197,94,.22), transparent 60%),
+                  var(--highlightBase);
+      border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+    }
+    .pill{
+      display:inline-flex; align-items:center;
+      padding: 4px 10px; border-radius: 999px;
+      background: var(--pillBg);
+      border: 1px solid var(--pillBorder);
+      color: var(--pillText);
+      font-weight: 900; font-size: 12px;
+      gap:6px;
     }
     .metric .k{ color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.1em; font-weight:800; }
     .metric .v{ font-size:27px; font-weight:900; margin-top:5px; }
@@ -159,14 +216,11 @@
       grid-template-rows:auto 1fr;
       gap:8px;
     }
-    .chartTitle{ font-size:12px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; font-weight:900; }
-    canvas{ width:100%; height:170px; display:block; }
-    .donutWrap{ display:grid; grid-template-columns:130px 1fr; align-items:center; gap:10px; }
-    .donut{
-      width:130px; height:130px; border-radius:50%;
-      background:conic-gradient(var(--lineB) 0deg, var(--lineB) 220deg, var(--lineC) 220deg 360deg);
-      position:relative;
-      margin:auto;
+    .mini{
+      background: var(--fieldbg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
     }
     .donut::after{
       content:"";
@@ -185,14 +239,14 @@
 
 <body>
   <div class="wrap">
-    <header class="topBar">
-      <div>
+    <header>
+      <div class="topBar">
         <h1>SIP Calculator</h1>
-        <div class="sub">Plan, compare and visualize your investment journey instantly</div>
+        <button class="themeToggle" id="themeToggle" type="button" onclick="toggleTheme()">
+          <span class="icon" id="themeIcon">🌙</span>
+          <span id="themeLabel">Dark mode</span>
+        </button>
       </div>
-      <button class="themeToggle" id="themeToggle" type="button" onclick="toggleTheme()">
-        <span id="themeLabel">Dark mode</span>
-      </button>
     </header>
 
     <div class="grid">
@@ -200,6 +254,7 @@
         <div class="panelHead">Inputs</div>
         <div class="panelBody">
           <div class="form">
+
             <div class="line">
               <div class="field">
                 <label for="lumpSum">Lump Sum</label>
@@ -282,22 +337,15 @@
         </div>
       </section>
 
-      <section class="dash">
-        <div class="resultRow">
-          <div class="metric">
-            <div class="k">Maturity Amount</div>
-            <div class="v" id="maturityText">Rs. 0.00</div>
-            <div class="s" id="investedHint">Total invested: Rs. 0.00</div>
-          </div>
-          <div class="metric">
-            <div class="k">Total Deposits</div>
-            <div class="v" id="depositText">Rs. 0.00</div>
-          </div>
-          <div class="metric">
-            <div class="k">Total Returns</div>
-            <div class="v" id="returnsText">Rs. 0.00</div>
-          </div>
-        </div>
+      <section class="panel">
+        <div class="panelHead">Results</div>
+        <div class="panelBody">
+          <div id="result" class="resultStack hidden">
+            <div class="highlight">
+              <span class="pill">⭐ Maturity Amount</span>
+              <div class="moneyBig" id="maturityText">Rs. 0.00</div>
+              <div class="mutedLine" id="investedHint">Total invested: Rs. 0.00</div>
+            </div>
 
         <div class="chartsGrid">
           <div class="chartCard">
@@ -520,15 +568,13 @@
       document.getElementById("returnShare").textContent = ((returns / total) * 100).toFixed(1) + "%";
     }
 
-    function updateThemeToggle(isDark) {
-      document.getElementById("themeLabel").textContent = isDark ? "Light mode" : "Dark mode";
+    function avgRemainingMonthsFullYear(n, p) {
+      return 12 - (p * (n - 1) / 2);
     }
 
-    function toggleTheme() {
-      const isDark = document.body.classList.toggle("dark");
-      localStorage.setItem("sip-theme", isDark ? "dark" : "light");
-      updateThemeToggle(isDark);
-      if (window.lastProjection) renderCharts(window.lastProjection);
+    function depositCountPartial(remMonths, p) {
+      if (remMonths <= 0) return 0;
+      return Math.floor((remMonths - 1) / p) + 1;
     }
 
     function initTheme() {
@@ -547,6 +593,25 @@
       updateDonut(projection.invested, projection.returns);
     }
 
+
+    function updateThemeToggle(isDark) {
+      document.getElementById("themeIcon").textContent = isDark ? "☀️" : "🌙";
+      document.getElementById("themeLabel").textContent = isDark ? "Light mode" : "Dark mode";
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle("dark");
+      localStorage.setItem("sip-theme", isDark ? "dark" : "light");
+      updateThemeToggle(isDark);
+    }
+
+    function initTheme() {
+      const stored = localStorage.getItem("sip-theme");
+      const isDark = stored === "dark";
+      document.body.classList.toggle("dark", isDark);
+      updateThemeToggle(isDark);
+    }
+
     function calculateSIP() {
       const lumpSum = parseFloat(document.getElementById("lumpSum").value) || 0;
       const depositPerPeriod = parseFloat(document.getElementById("depositAmount").value) || 0;
@@ -562,24 +627,59 @@
         return;
       }
 
-      const totalMonths = termUnit === "years" ? termValue * 12 : termValue;
-      const projection = buildProjection({
-        lumpSum,
-        depositPerPeriod,
-        freq,
-        stepUpValue,
-        stepUpUnit,
-        annualRate,
-        totalMonths
-      });
+      const { n, p } = getFrequencyConfig(freq);
+      const r = annualRate / 100;
 
-      window.lastProjection = projection;
-      document.getElementById("maturityText").textContent = formatINR(projection.corpus);
-      document.getElementById("depositText").textContent = formatINR(projection.invested);
-      document.getElementById("returnsText").textContent = formatINR(projection.returns);
-      document.getElementById("investedHint").textContent = "Total invested: " + formatINR(projection.invested);
-      renderCharts(projection);
+      const totalMonths = (termUnit === "years") ? (termValue * 12) : termValue;
+      const fullYears = Math.floor(totalMonths / 12);
+      const remMonths = totalMonths % 12;
+
+      let totalDeposits = lumpSum;
+      let depPerPeriod = depositPerPeriod0;
+
+      for (let y = 0; y < fullYears; y++) {
+        totalDeposits += depPerPeriod * n;
+        depPerPeriod = applyStepUp(depPerPeriod, stepUpValue, stepUpUnit);
+      }
+      if (remMonths > 0) {
+        const cnt = depositCountPartial(remMonths, p);
+        totalDeposits += depPerPeriod * cnt;
+      }
+
+      let corpus = lumpSum;
+      depPerPeriod = depositPerPeriod0;
+
+      for (let y = 0; y < fullYears; y++) {
+        corpus *= (1 + r);
+
+        const avgMonths = avgRemainingMonthsFullYear(n, p);
+        const yearDeposit = depPerPeriod * n;
+        corpus += yearDeposit * (1 + r * (avgMonths / 12));
+
+        depPerPeriod = applyStepUp(depPerPeriod, stepUpValue, stepUpUnit);
+      }
+
+      if (remMonths > 0) {
+        corpus *= (1 + r * (remMonths / 12));
+
+        const cnt = depositCountPartial(remMonths, p);
+        const avgRem = avgRemainingMonthsPartial(remMonths, p);
+        const partDeposit = depPerPeriod * cnt;
+        corpus += partDeposit * (1 + r * (avgRem / 12));
+      }
+
+      const totalReturns = corpus - totalDeposits;
+
+      document.getElementById("result").classList.remove("hidden");
+      document.getElementById("emptyState").classList.add("hidden");
+
+      document.getElementById("maturityText").textContent = formatINR(corpus);
+      document.getElementById("depositText").textContent = formatINR(totalDeposits);
+      document.getElementById("returnsText").textContent = formatINR(totalReturns);
+      document.getElementById("investedHint").textContent = "Total invested: " + formatINR(totalDeposits);
     }
+
+    initTheme();
 
     function resetForm() {
       document.getElementById("lumpSum").value = 0;

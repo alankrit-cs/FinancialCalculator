@@ -60,7 +60,6 @@
 
     .form{ display:grid; gap: 12px; }
 
-    /* Your requested "line layout" */
     .line{ display:grid; gap:12px; }
     .line.two{ grid-template-columns: 1fr 1fr; }
     @media (max-width: 520px){
@@ -88,7 +87,7 @@
       font-size: 15px;
       outline:none;
     }
-    select{ padding-left: 12px; } /* no prefix for selects */
+    select{ padding-left: 12px; }
     input:focus, select:focus{
       border-color: rgba(91,124,250,.65);
       box-shadow: 0 0 0 4px rgba(91,124,250,.15);
@@ -133,7 +132,6 @@
       background: rgba(0,0,0,.12);
     }
 
-    /* Results */
     .resultStack{ display:grid; gap: 12px; }
     .highlight{
       background: radial-gradient(700px 220px at 15% 0%, rgba(91,124,250,.35), transparent 55%),
@@ -188,13 +186,11 @@
     </header>
 
     <div class="grid">
-      <!-- INPUTS -->
       <section class="panel">
         <div class="panelHead">Inputs</div>
         <div class="panelBody">
           <div class="form">
 
-            <!-- Line 1: Lump Sum -->
             <div class="line">
               <div class="field">
                 <label for="lumpSum">Lump Sum</label>
@@ -205,7 +201,6 @@
               </div>
             </div>
 
-            <!-- Line 2: Regular Deposit Amount, Deposit Frequency -->
             <div class="line two">
               <div class="field">
                 <label for="depositAmount">Regular Deposit Amount</label>
@@ -226,7 +221,6 @@
               </div>
             </div>
 
-            <!-- Line 3: Increase/Decrease, Step-up Unit -->
             <div class="line two">
               <div class="field">
                 <label for="stepUpValue">Increase/Decrease Deposit Every Year</label>
@@ -245,7 +239,6 @@
               </div>
             </div>
 
-            <!-- Line 4: Term, Term Unit -->
             <div class="line two">
               <div class="field">
                 <label for="termValue">Term</label>
@@ -264,7 +257,6 @@
               </div>
             </div>
 
-            <!-- Line 5: Expected Return -->
             <div class="line">
               <div class="field">
                 <label for="rate">Expected Return (%)</label>
@@ -288,7 +280,6 @@
         </div>
       </section>
 
-      <!-- RESULTS -->
       <section class="panel">
         <div class="panelHead">Results</div>
         <div class="panelBody">
@@ -327,7 +318,6 @@
       }).format(value);
     }
 
-    // frequency -> deposits per year (n) and spacing in months (p)
     function getFrequencyConfig(freq) {
       switch (freq) {
         case "monthly": return { n: 12, p: 1 };
@@ -338,13 +328,10 @@
       }
     }
 
-    // For a full year: deposits at months 0, p, 2p... (n-1)p
-    // average remaining months to end-of-year = 12 - p*(n-1)/2
     function avgRemainingMonthsFullYear(n, p) {
       return 12 - (p * (n - 1) / 2);
     }
 
-    // Partial year (remMonths): deposits at months 0, p, 2p... < remMonths
     function depositCountPartial(remMonths, p) {
       if (remMonths <= 0) return 0;
       return Math.floor((remMonths - 1) / p) + 1;
@@ -381,12 +368,10 @@
       const { n, p } = getFrequencyConfig(freq);
       const r = annualRate / 100;
 
-      // Convert term into total months
       const totalMonths = (termUnit === "years") ? (termValue * 12) : termValue;
       const fullYears = Math.floor(totalMonths / 12);
       const remMonths = totalMonths % 12;
 
-      // TOTAL DEPOSITS
       let totalDeposits = lumpSum;
       let depPerPeriod = depositPerPeriod0;
 
@@ -399,7 +384,6 @@
         totalDeposits += depPerPeriod * cnt;
       }
 
-      // CORPUS (APP-STYLE)
       let corpus = lumpSum;
       depPerPeriod = depositPerPeriod0;
 

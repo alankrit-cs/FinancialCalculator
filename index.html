@@ -4,197 +4,172 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>SIP Calculator</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234d6dff'/%3E%3Cpath d='M14 42h36M18 34l8-9 8 6 12-14' stroke='white' stroke-width='5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
 
   <style>
     :root{
-      --bg:#0b1220;
-      --muted:#9fb0d0;
-      --text:#eaf0ff;
-      --accent:#5b7cfa;
-      --accent2:#22c55e;
-      --border:rgba(255,255,255,.10);
-      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --bg:#f0f4ff;
+      --text:#1b2442;
+      --muted:#5f7099;
+      --panel:#ffffff;
+      --border:rgba(65,91,150,.22);
+      --field:#f9fbff;
+      --accent:#4d6dff;
+      --accent2:#10b981;
+      --accent3:#ff845d;
+      --shadow:0 12px 30px rgba(74,100,158,.18);
+      --focus:rgba(77,109,255,.2);
+      --grid:rgba(90,114,170,.16);
+      --lineA:#4d6dff;
+      --lineB:#10b981;
       --radius:16px;
-      --fieldbg: rgba(16,31,54,.55);
+    }
+    body.dark{
+      --bg:#0d1425;
+      --text:#eaf0ff;
+      --muted:#a2b2d4;
+      --panel:#121d34;
+      --border:rgba(255,255,255,.12);
+      --field:#0f1b32;
+      --accent:#6f8bff;
+      --accent2:#34d399;
+      --accent3:#ff9b79;
+      --shadow:0 16px 38px rgba(0,0,0,.45);
+      --focus:rgba(111,139,255,.25);
+      --grid:rgba(255,255,255,.13);
+      --lineA:#8ca2ff;
+      --lineB:#44e2a3;
     }
     *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(1200px 600px at 20% 0%, rgba(91,124,250,.25), transparent 60%),
-                  radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.18), transparent 55%),
-                  var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: linear-gradient(150deg, var(--bg), color-mix(in srgb, var(--bg) 70%, #dff7ef));
       color:var(--text);
       min-height:100vh;
-      padding: 28px 14px;
+      padding:18px 12px 20px;
     }
-    .wrap{ max-width: 980px; margin: 0 auto; display:grid; gap:16px; }
-    header{ padding: 6px 4px 0; }
-    h1{ font-size: 28px; margin:0; letter-spacing:.2px; }
-    .subtitle{ color: var(--muted); font-size: 14px; margin-top:6px; }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:16px;
+    .wrap{ max-width:1120px; margin:0 auto; display:grid; gap:12px; }
+    .topbar, .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
     }
-    @media (max-width: 900px){
-      .grid{ grid-template-columns: 1fr; }
+    .topbar{
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
     }
-
-    .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .panelHead{
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.18);
-      font-weight: 800;
-      letter-spacing:.2px;
-    }
-    .panelBody{ padding: 16px; }
-
-    .form{ display:grid; gap: 12px; }
-
-    /* Your requested "line layout" */
-    .line{ display:grid; gap:12px; }
-    .line.two{ grid-template-columns: 1fr 1fr; }
-    @media (max-width: 520px){
-      .line.two{ grid-template-columns: 1fr; }
+    h1{ margin:0; font-size:24px; }
+    .sub{ color:var(--muted); font-size:13px; margin-top:4px; }
+    .themeToggle{
+      border:1px solid var(--border);
+      background:var(--field);
+      color:var(--text);
+      border-radius:12px;
+      padding:9px 12px;
+      font-weight:700;
+      cursor:pointer;
     }
 
-    .field{ display:grid; gap: 7px; }
-    .field label{ color: var(--muted); font-size: 13px; }
+    .layout{ display:grid; grid-template-columns:360px 1fr; gap:12px; align-items:start; }
+    @media (max-width:980px){ .layout{ grid-template-columns:1fr; } }
 
+    .head{ padding:12px 14px; border-bottom:1px solid var(--border); font-weight:900; letter-spacing:.03em; }
+    .body{ padding:14px; }
+    .form{ display:grid; gap:10px; }
+    .line{ display:grid; gap:10px; }
+    .line.two{ grid-template-columns:1fr 1fr; }
+    @media (max-width:560px){ .line.two{ grid-template-columns:1fr; } }
+    .field{ display:grid; gap:6px; }
+    .field label{ color:var(--muted); font-size:12px; font-weight:700; }
     .inputWrap{ position:relative; }
-    .prefix{
-      position:absolute; left: 12px; top: 50%;
-      transform: translateY(-50%);
-      color: rgba(234,240,255,.75);
-      font-size: 14px; pointer-events:none;
-    }
-
+    .prefix{ position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:13px; }
     input, select{
       width:100%;
-      padding: 12px 12px 12px 36px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: var(--fieldbg);
-      color: var(--text);
-      font-size: 15px;
+      border:1px solid var(--border);
+      background:var(--field);
+      color:var(--text);
+      border-radius:12px;
+      font-size:14px;
+      padding:10px 11px 10px 32px;
       outline:none;
     }
-    select{ padding-left: 12px; } /* no prefix for selects */
-    input:focus, select:focus{
-      border-color: rgba(91,124,250,.65);
-      box-shadow: 0 0 0 4px rgba(91,124,250,.15);
-    }
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    select{ padding-left:11px; }
+    input:focus, select:focus{ box-shadow:0 0 0 4px var(--focus); }
+    .actions{ display:flex; flex-wrap:wrap; gap:8px; }
+    button{ border:0; border-radius:12px; padding:10px 12px; font-weight:800; cursor:pointer; }
+    .btnPrimary{ background:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #fff)); color:#fff; }
+    .btnGhost{ background:var(--field); color:var(--text); border:1px solid var(--border); }
 
-    .actions{
-      display:flex;
-      gap:10px;
-      margin-top: 6px;
-      flex-wrap:wrap;
+    .right{ display:grid; gap:10px; }
+    .metrics{ display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px; }
+    @media (max-width:740px){ .metrics{ grid-template-columns:1fr; } }
+    .metric{
+      background:var(--field);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
     }
-    button{
-      border:0;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-weight: 800;
-      cursor:pointer;
-      font-size: 14px;
-      transition: transform .05s ease, filter .15s ease;
-    }
-    button:active{ transform: translateY(1px); }
-    .btnPrimary{
-      background: linear-gradient(135deg, rgba(91,124,250,1), rgba(91,124,250,.75));
-      color:white;
-    }
-    .btnGhost{
-      background: rgba(255,255,255,.08);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,.10);
-    }
+    .k{ color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.1em; font-weight:800; }
+    .v{ font-size:28px; font-weight:900; margin-top:5px; }
+    .hint{ font-size:13px; color:var(--muted); margin-top:6px; }
 
-    .disclaimer{
-      margin-top: 10px;
-      color: rgba(234,240,255,.65);
-      font-size: 12px;
-      line-height: 1.4;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px dashed rgba(255,255,255,.16);
-      background: rgba(0,0,0,.12);
-    }
-
-    /* Results */
-    .resultStack{ display:grid; gap: 12px; }
-    .highlight{
-      background: radial-gradient(700px 220px at 15% 0%, rgba(91,124,250,.35), transparent 55%),
-                  radial-gradient(700px 240px at 90% 40%, rgba(34,197,94,.22), transparent 60%),
-                  rgba(16,31,54,.55);
-      border: 1px solid rgba(91,124,250,.35);
-      border-radius: 16px;
-      padding: 14px 14px 12px;
-    }
-    .pill{
-      display:inline-flex; align-items:center;
-      padding: 4px 10px; border-radius: 999px;
-      background: rgba(34,197,94,.16);
-      border: 1px solid rgba(34,197,94,.32);
-      color: rgba(220,255,235,.95);
-      font-weight: 900; font-size: 12px;
-      gap:6px;
-    }
-    .moneyBig{ font-size: 34px; font-weight: 950; margin-top: 8px; line-height: 1.05; }
-    .mutedLine{ color: var(--muted); font-size: 13px; margin-top: 6px; }
-
-    .miniCards{
+    .charts{ display:grid; grid-template-columns:1.4fr 1fr; gap:10px; }
+    @media (max-width:980px){ .charts{ grid-template-columns:1fr; } }
+    .chartCard{
+      background:var(--field);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px;
+      min-height:220px;
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap:8px;
+      grid-template-rows:auto 1fr;
     }
-    @media (max-width: 520px){
-      .miniCards{ grid-template-columns:1fr; }
+    .title{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-weight:900; }
+    canvas{ width:100%; height:175px; display:block; }
+    .mixWrap{ display:grid; grid-template-columns:130px 1fr; gap:10px; align-items:center; }
+    .donut{
+      width:130px;
+      height:130px;
+      border-radius:50%;
+      background:conic-gradient(var(--accent2) 0deg, var(--accent2) 260deg, var(--accent3) 260deg 360deg);
+      position:relative;
+      margin:auto;
     }
-    .mini{
-      background: rgba(16,31,54,.45);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding: 12px;
+    .donut::after{
+      content:"";
+      position:absolute;
+      inset:19px;
+      border-radius:50%;
+      background:var(--field);
+      border:1px solid var(--border);
     }
-    .mini .k{
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing:.14em;
-    }
-    .mini .v{ margin-top: 6px; font-weight: 950; font-size: 18px; }
-
-    .hidden{ display:none; }
+    .legend{ display:grid; gap:8px; }
+    .item{ display:flex; justify-content:space-between; align-items:center; font-size:13px; }
+    .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:8px; }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <header>
-      <h1>SIP Calculator</h1>
+    <header class="topbar">
+      <div>
+        <h1>SIP Calculator</h1>
+        <div class="sub">Simple planner with two clear charts</div>
+      </div>
+      <button class="themeToggle" id="themeToggle" type="button" aria-label="Toggle theme" onclick="toggleTheme()">Dark mode</button>
     </header>
 
-    <div class="grid">
-      <!-- INPUTS -->
+    <div class="layout">
       <section class="panel">
-        <div class="panelHead">Inputs</div>
-        <div class="panelBody">
+        <div class="head">Inputs</div>
+        <div class="body">
           <div class="form">
-
-            <!-- Line 1: Lump Sum -->
             <div class="line">
               <div class="field">
                 <label for="lumpSum">Lump Sum</label>
@@ -204,8 +179,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Line 2: Regular Deposit Amount, Deposit Frequency -->
             <div class="line two">
               <div class="field">
                 <label for="depositAmount">Regular Deposit Amount</label>
@@ -214,7 +187,6 @@
                   <input type="number" id="depositAmount" placeholder="e.g., 2000" min="0" inputmode="decimal" />
                 </div>
               </div>
-
               <div class="field">
                 <label for="depositFreq">Deposit Frequency</label>
                 <select id="depositFreq">
@@ -225,8 +197,6 @@
                 </select>
               </div>
             </div>
-
-            <!-- Line 3: Increase/Decrease, Step-up Unit -->
             <div class="line two">
               <div class="field">
                 <label for="stepUpValue">Increase/Decrease Deposit Every Year</label>
@@ -235,7 +205,6 @@
                   <input type="number" id="stepUpValue" value="0" inputmode="decimal" />
                 </div>
               </div>
-
               <div class="field">
                 <label for="stepUpUnit">Step-up Unit</label>
                 <select id="stepUpUnit">
@@ -244,8 +213,6 @@
                 </select>
               </div>
             </div>
-
-            <!-- Line 4: Term, Term Unit -->
             <div class="line two">
               <div class="field">
                 <label for="termValue">Term</label>
@@ -254,7 +221,6 @@
                   <input type="number" id="termValue" placeholder="e.g., 20" min="0" inputmode="numeric" />
                 </div>
               </div>
-
               <div class="field">
                 <label for="termUnit">Term Unit</label>
                 <select id="termUnit">
@@ -263,8 +229,6 @@
                 </select>
               </div>
             </div>
-
-            <!-- Line 5: Expected Return -->
             <div class="line">
               <div class="field">
                 <label for="rate">Expected Return (%)</label>
@@ -274,45 +238,46 @@
                 </div>
               </div>
             </div>
-
             <div class="actions">
-              <button class="btnPrimary" onclick="calculateSIP()">Calculate</button>
-              <button class="btnGhost" onclick="resetForm()">Reset</button>
+              <button class="btnPrimary" type="button" onclick="calculateSIP()">Calculate</button>
+              <button class="btnGhost" type="button" onclick="resetForm()">Reset</button>
             </div>
-
-          </div>
-
-          <div class="disclaimer">
-            SIP returns are not guaranteed and may vary based on market conditions.
           </div>
         </div>
       </section>
 
-      <!-- RESULTS -->
-      <section class="panel">
-        <div class="panelHead">Results</div>
-        <div class="panelBody">
-          <div id="result" class="resultStack hidden">
-            <div class="highlight">
-              <span class="pill">⭐ Maturity Amount</span>
-              <div class="moneyBig" id="maturityText">Rs. 0.00</div>
-              <div class="mutedLine" id="investedHint">Total invested: Rs. 0.00</div>
-            </div>
-
-            <div class="miniCards">
-              <div class="mini">
-                <div class="k">Total Deposits</div>
-                <div class="v" id="depositText">Rs. 0.00</div>
-              </div>
-              <div class="mini">
-                <div class="k">Total Returns</div>
-                <div class="v" id="returnsText">Rs. 0.00</div>
-              </div>
-            </div>
+      <section class="right">
+        <div class="metrics">
+          <div class="metric">
+            <div class="k">Maturity Amount</div>
+            <div class="v" id="maturityText">Rs. 0.00</div>
+            <div class="hint" id="investedHint">Total invested: Rs. 0.00</div>
           </div>
+          <div class="metric">
+            <div class="k">Total Deposits</div>
+            <div class="v" id="depositText">Rs. 0.00</div>
+          </div>
+          <div class="metric">
+            <div class="k">Total Returns</div>
+            <div class="v" id="returnsText">Rs. 0.00</div>
+          </div>
+        </div>
 
-          <div id="emptyState" class="mutedLine">
-            Enter values and hit <b>Calculate</b>.
+        <div class="charts">
+          <div class="chartCard">
+            <div class="title">Investment vs Portfolio Value</div>
+            <canvas id="lineChart" width="650" height="175"></canvas>
+          </div>
+          <div class="chartCard">
+            <div class="title">Mix at Maturity</div>
+            <div class="mixWrap">
+              <div class="donut" id="mixDonut"></div>
+              <div class="legend">
+                <div class="item"><span><span class="dot" style="background:var(--accent2)"></span>Invested</span><strong id="donutInvested">Rs. 0.00</strong></div>
+                <div class="item"><span><span class="dot" style="background:var(--accent3)"></span>Returns</span><strong id="donutReturns">Rs. 0.00</strong></div>
+                <div class="item"><span>Returns share</span><strong id="returnShare">0%</strong></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -327,110 +292,160 @@
       }).format(value);
     }
 
-    // frequency -> deposits per year (n) and spacing in months (p)
     function getFrequencyConfig(freq) {
       switch (freq) {
-        case "monthly": return { n: 12, p: 1 };
-        case "quarterly": return { n: 4, p: 3 };
-        case "halfYearly": return { n: 2, p: 6 };
-        case "yearly": return { n: 1, p: 12 };
-        default: return { n: 12, p: 1 };
+        case "monthly": return { p: 1 };
+        case "quarterly": return { p: 3 };
+        case "halfYearly": return { p: 6 };
+        case "yearly": return { p: 12 };
+        default: return { p: 1 };
       }
     }
 
-    // For a full year: deposits at months 0, p, 2p... (n-1)p
-    // average remaining months to end-of-year = 12 - p*(n-1)/2
-    function avgRemainingMonthsFullYear(n, p) {
-      return 12 - (p * (n - 1) / 2);
+    function applyStepUp(value, stepUpValue, stepUpUnit) {
+      if (stepUpUnit === "rupees") return value + stepUpValue;
+      return value * (1 + stepUpValue / 100);
     }
 
-    // Partial year (remMonths): deposits at months 0, p, 2p... < remMonths
-    function depositCountPartial(remMonths, p) {
-      if (remMonths <= 0) return 0;
-      return Math.floor((remMonths - 1) / p) + 1;
-    }
-    function avgRemainingMonthsPartial(remMonths, p) {
-      if (remMonths <= 0) return 0;
-      const count = depositCountPartial(remMonths, p);
-      return remMonths - (p * (count - 1) / 2);
+    function buildProjection(params) {
+      const monthlyRate = params.annualRate / 100 / 12;
+      const freqStep = getFrequencyConfig(params.freq).p;
+      const points = [];
+
+      let corpus = params.lumpSum;
+      let invested = params.lumpSum;
+      let depPerPeriod = params.depositPerPeriod;
+
+      points.push({ month: 0, invested, corpus });
+
+      for (let m = 1; m <= params.totalMonths; m++) {
+        if ((m - 1) % 12 === 0 && m > 1) {
+          depPerPeriod = Math.max(0, applyStepUp(depPerPeriod, params.stepUpValue, params.stepUpUnit));
+        }
+        if ((m - 1) % freqStep === 0) {
+          invested += depPerPeriod;
+          corpus += depPerPeriod;
+        }
+        corpus *= (1 + monthlyRate);
+        points.push({ month: m, invested, corpus });
+      }
+
+      return { points, invested, corpus, returns: corpus - invested };
     }
 
-    function applyStepUp(depPerPeriod, stepUpValue, stepUpUnit) {
-      if (stepUpUnit === "rupees") return depPerPeriod + stepUpValue;
-      return depPerPeriod * (1 + stepUpValue / 100);
+    function drawAxes(ctx, width, height, left, top, right, bottom) {
+      ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--grid");
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = top + ((height - top - bottom) * i / 4);
+        ctx.beginPath();
+        ctx.moveTo(left, y);
+        ctx.lineTo(width - right, y);
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(left, top);
+      ctx.lineTo(left, height - bottom);
+      ctx.lineTo(width - right, height - bottom);
+      ctx.stroke();
+    }
+
+    function drawLineGraph(points) {
+      const canvas = document.getElementById("lineChart");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const pad = { l: 42, t: 14, r: 12, b: 24 };
+
+      ctx.clearRect(0, 0, w, h);
+      drawAxes(ctx, w, h, pad.l, pad.t, pad.r, pad.b);
+
+      const maxY = Math.max(...points.map(p => Math.max(p.invested, p.corpus)), 1);
+      const maxX = Math.max(points[points.length - 1].month, 1);
+      const mapX = x => pad.l + (x / maxX) * (w - pad.l - pad.r);
+      const mapY = y => h - pad.b - (y / maxY) * (h - pad.t - pad.b);
+
+      ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--lineB");
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      points.forEach((p, i) => i === 0 ? ctx.moveTo(mapX(p.month), mapY(p.invested)) : ctx.lineTo(mapX(p.month), mapY(p.invested)));
+      ctx.stroke();
+
+      ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--lineA");
+      ctx.beginPath();
+      points.forEach((p, i) => i === 0 ? ctx.moveTo(mapX(p.month), mapY(p.corpus)) : ctx.lineTo(mapX(p.month), mapY(p.corpus)));
+      ctx.stroke();
+
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--muted");
+      ctx.font = "11px Inter, system-ui";
+      ctx.fillText("Invested", w - 148, 14);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineB");
+      ctx.fillRect(w - 204, 6, 12, 2);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--muted");
+      ctx.fillText("Portfolio", w - 75, 14);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineA");
+      ctx.fillRect(w - 131, 6, 12, 2);
+    }
+
+    function updateDonut(invested, returns) {
+      const total = Math.max(invested + returns, 1);
+      const investDeg = (invested / total) * 360;
+      document.getElementById("mixDonut").style.background = `conic-gradient(var(--accent2) 0deg, var(--accent2) ${investDeg}deg, var(--accent3) ${investDeg}deg 360deg)`;
+      document.getElementById("donutInvested").textContent = formatINR(invested);
+      document.getElementById("donutReturns").textContent = formatINR(returns);
+      document.getElementById("returnShare").textContent = ((returns / total) * 100).toFixed(1) + "%";
+    }
+
+    function updateThemeToggle(isDark) {
+      document.getElementById("themeToggle").textContent = isDark ? "Light mode" : "Dark mode";
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle("dark");
+      localStorage.setItem("sip-theme", isDark ? "dark" : "light");
+      updateThemeToggle(isDark);
+      if (window.lastProjection) drawLineGraph(window.lastProjection.points);
+    }
+
+    function initTheme() {
+      const isDark = localStorage.getItem("sip-theme") === "dark";
+      document.body.classList.toggle("dark", isDark);
+      updateThemeToggle(isDark);
     }
 
     function calculateSIP() {
       const lumpSum = parseFloat(document.getElementById("lumpSum").value) || 0;
-      const depositPerPeriod0 = parseFloat(document.getElementById("depositAmount").value) || 0;
-
+      const depositPerPeriod = parseFloat(document.getElementById("depositAmount").value) || 0;
       const freq = document.getElementById("depositFreq").value;
       const stepUpValue = parseFloat(document.getElementById("stepUpValue").value) || 0;
       const stepUpUnit = document.getElementById("stepUpUnit").value;
-
       const termValue = parseInt(document.getElementById("termValue").value) || 0;
       const termUnit = document.getElementById("termUnit").value;
-
       const annualRate = parseFloat(document.getElementById("rate").value) || 0;
 
-      if (annualRate <= 0 || termValue <= 0 || depositPerPeriod0 <= 0) {
+      if (annualRate <= 0 || termValue <= 0 || depositPerPeriod <= 0) {
         alert("Please enter Regular Deposit Amount, Expected Return (%), and Term.");
         return;
       }
 
-      const { n, p } = getFrequencyConfig(freq);
-      const r = annualRate / 100;
+      const totalMonths = termUnit === "years" ? termValue * 12 : termValue;
+      const projection = buildProjection({
+        lumpSum,
+        depositPerPeriod,
+        freq,
+        stepUpValue,
+        stepUpUnit,
+        annualRate,
+        totalMonths
+      });
 
-      // Convert term into total months
-      const totalMonths = (termUnit === "years") ? (termValue * 12) : termValue;
-      const fullYears = Math.floor(totalMonths / 12);
-      const remMonths = totalMonths % 12;
-
-      // TOTAL DEPOSITS
-      let totalDeposits = lumpSum;
-      let depPerPeriod = depositPerPeriod0;
-
-      for (let y = 0; y < fullYears; y++) {
-        totalDeposits += depPerPeriod * n;
-        depPerPeriod = applyStepUp(depPerPeriod, stepUpValue, stepUpUnit);
-      }
-      if (remMonths > 0) {
-        const cnt = depositCountPartial(remMonths, p);
-        totalDeposits += depPerPeriod * cnt;
-      }
-
-      // CORPUS (APP-STYLE)
-      let corpus = lumpSum;
-      depPerPeriod = depositPerPeriod0;
-
-      for (let y = 0; y < fullYears; y++) {
-        corpus *= (1 + r);
-
-        const avgMonths = avgRemainingMonthsFullYear(n, p);
-        const yearDeposit = depPerPeriod * n;
-        corpus += yearDeposit * (1 + r * (avgMonths / 12));
-
-        depPerPeriod = applyStepUp(depPerPeriod, stepUpValue, stepUpUnit);
-      }
-
-      if (remMonths > 0) {
-        corpus *= (1 + r * (remMonths / 12));
-
-        const cnt = depositCountPartial(remMonths, p);
-        const avgRem = avgRemainingMonthsPartial(remMonths, p);
-        const partDeposit = depPerPeriod * cnt;
-        corpus += partDeposit * (1 + r * (avgRem / 12));
-      }
-
-      const totalReturns = corpus - totalDeposits;
-
-      document.getElementById("result").classList.remove("hidden");
-      document.getElementById("emptyState").classList.add("hidden");
-
-      document.getElementById("maturityText").textContent = formatINR(corpus);
-      document.getElementById("depositText").textContent = formatINR(totalDeposits);
-      document.getElementById("returnsText").textContent = formatINR(totalReturns);
-      document.getElementById("investedHint").textContent = "Total invested: " + formatINR(totalDeposits);
+      window.lastProjection = projection;
+      document.getElementById("maturityText").textContent = formatINR(projection.corpus);
+      document.getElementById("depositText").textContent = formatINR(projection.invested);
+      document.getElementById("returnsText").textContent = formatINR(projection.returns);
+      document.getElementById("investedHint").textContent = "Total invested: " + formatINR(projection.invested);
+      drawLineGraph(projection.points);
+      updateDonut(projection.invested, projection.returns);
     }
 
     function resetForm() {
@@ -442,10 +457,17 @@
       document.getElementById("termValue").value = "";
       document.getElementById("termUnit").value = "years";
       document.getElementById("rate").value = "";
-
-      document.getElementById("result").classList.add("hidden");
-      document.getElementById("emptyState").classList.remove("hidden");
+      window.lastProjection = null;
+      document.getElementById("maturityText").textContent = "Rs. 0.00";
+      document.getElementById("depositText").textContent = "Rs. 0.00";
+      document.getElementById("returnsText").textContent = "Rs. 0.00";
+      document.getElementById("investedHint").textContent = "Total invested: Rs. 0.00";
+      drawLineGraph([{month:0, invested:0, corpus:0}, {month:1, invested:0, corpus:0}]);
+      updateDonut(0, 0);
     }
+
+    initTheme();
+    resetForm();
   </script>
 </body>
 </html>

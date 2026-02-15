@@ -7,194 +7,199 @@
 
   <style>
     :root{
+      --bg:#eef3ff;
+      --bg2:#e9fff7;
+      --text:#17213b;
+      --muted:#5d7099;
+      --accent:#4d6dff;
+      --accent2:#09a66d;
+      --accent3:#ff7d5c;
+      --panel:#ffffffcc;
+      --border:rgba(55,82,140,.22);
+      --field:#f8fbff;
+      --shadow:0 16px 44px rgba(56,83,141,.2);
+      --focus:rgba(77,109,255,.2);
+      --radius:18px;
+      --chartGrid:rgba(91,118,175,.16);
+      --lineA:#4d6dff;
+      --lineB:#09a66d;
+      --lineC:#ff7d5c;
+      --lineD:#7b5cff;
+    }
+    body.dark{
       --bg:#0b1220;
-      --muted:#9fb0d0;
+      --bg2:#102536;
       --text:#eaf0ff;
+      --muted:#9fb0d0;
       --accent:#5b7cfa;
       --accent2:#22c55e;
-      --border:rgba(255,255,255,.10);
-      --shadow: 0 18px 50px rgba(0,0,0,.45);
-      --radius:16px;
-      --fieldbg: rgba(16,31,54,.55);
+      --accent3:#fb8d65;
+      --panel:rgba(17,30,52,.86);
+      --border:rgba(255,255,255,.12);
+      --field:rgba(11,24,44,.8);
+      --shadow:0 22px 54px rgba(0,0,0,.5);
+      --focus:rgba(91,124,250,.24);
+      --chartGrid:rgba(255,255,255,.1);
+      --lineA:#7f9aff;
+      --lineB:#3ae88c;
+      --lineC:#ff9f83;
+      --lineD:#b69aff;
     }
     *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(1200px 600px at 20% 0%, rgba(91,124,250,.25), transparent 60%),
-                  radial-gradient(900px 500px at 90% 10%, rgba(34,197,94,.18), transparent 55%),
-                  var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(1200px 650px at 15% 0%, rgba(77,109,255,.25), transparent 62%),
+        radial-gradient(980px 520px at 90% 8%, rgba(9,166,109,.2), transparent 58%),
+        linear-gradient(165deg, var(--bg), var(--bg2));
       color:var(--text);
       min-height:100vh;
-      padding: 28px 14px;
+      padding:20px 12px 24px;
+      transition: background .25s ease, color .25s ease;
     }
-    .wrap{ max-width: 980px; margin: 0 auto; display:grid; gap:16px; }
-    header{ padding: 6px 4px 0; }
-    h1{ font-size: 28px; margin:0; letter-spacing:.2px; }
-    .subtitle{ color: var(--muted); font-size: 14px; margin-top:6px; }
+    .wrap{ max-width:1200px; margin:0 auto; display:grid; gap:14px; }
+    .topBar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:14px 16px;
+      backdrop-filter: blur(8px);
+    }
+    h1{ margin:0; font-size:26px; }
+    .sub{ color:var(--muted); font-size:13px; margin-top:4px; }
+    .themeToggle{
+      border:1px solid var(--border);
+      background:var(--field);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:700;
+      cursor:pointer;
+      min-width:116px;
+    }
 
     .grid{
       display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:16px;
+      grid-template-columns: 380px 1fr;
+      gap:14px;
+      align-items:start;
     }
-    @media (max-width: 900px){
-      .grid{ grid-template-columns: 1fr; }
+    @media (max-width:1020px){
+      .grid{ grid-template-columns:1fr; }
     }
 
     .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(8px);
     }
     .panelHead{
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.18);
-      font-weight: 800;
-      letter-spacing:.2px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      font-weight:900;
+      letter-spacing:.03em;
     }
-    .panelBody{ padding: 16px; }
+    .panelBody{ padding:14px; }
 
-    .form{ display:grid; gap: 12px; }
-
-    /* Your requested "line layout" */
-    .line{ display:grid; gap:12px; }
-    .line.two{ grid-template-columns: 1fr 1fr; }
-    @media (max-width: 520px){
-      .line.two{ grid-template-columns: 1fr; }
-    }
-
-    .field{ display:grid; gap: 7px; }
-    .field label{ color: var(--muted); font-size: 13px; }
-
+    .form{ display:grid; gap:10px; }
+    .line{ display:grid; gap:10px; }
+    .line.two{ grid-template-columns:1fr 1fr; }
+    @media (max-width:560px){ .line.two{ grid-template-columns:1fr; } }
+    .field{ display:grid; gap:6px; }
+    .field label{ color:var(--muted); font-size:12px; font-weight:700; }
     .inputWrap{ position:relative; }
-    .prefix{
-      position:absolute; left: 12px; top: 50%;
-      transform: translateY(-50%);
-      color: rgba(234,240,255,.75);
-      font-size: 14px; pointer-events:none;
-    }
-
+    .prefix{ position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:13px; }
     input, select{
       width:100%;
-      padding: 12px 12px 12px 36px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: var(--fieldbg);
-      color: var(--text);
-      font-size: 15px;
+      border:1px solid var(--border);
+      background:var(--field);
+      color:var(--text);
+      border-radius:12px;
+      font-size:14px;
+      padding:11px 12px 11px 34px;
       outline:none;
     }
-    select{ padding-left: 12px; } /* no prefix for selects */
-    input:focus, select:focus{
-      border-color: rgba(91,124,250,.65);
-      box-shadow: 0 0 0 4px rgba(91,124,250,.15);
-    }
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    select{ padding-left:12px; }
+    input:focus, select:focus{ box-shadow:0 0 0 4px var(--focus); }
+    .actions{ display:flex; flex-wrap:wrap; gap:8px; margin-top:2px; }
+    button{ border:0; border-radius:12px; padding:11px 13px; font-weight:800; cursor:pointer; }
+    .btnPrimary{ background:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #ffffff)); color:white; }
+    .btnGhost{ background:var(--field); border:1px solid var(--border); color:var(--text); }
 
-    .actions{
-      display:flex;
-      gap:10px;
-      margin-top: 6px;
-      flex-wrap:wrap;
+    .dash{ display:grid; gap:10px; }
+    .resultRow{ display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px; }
+    @media (max-width:760px){ .resultRow{ grid-template-columns:1fr; } }
+    .metric{
+      background:var(--field);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      min-height:90px;
     }
-    button{
-      border:0;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-weight: 800;
-      cursor:pointer;
-      font-size: 14px;
-      transition: transform .05s ease, filter .15s ease;
-    }
-    button:active{ transform: translateY(1px); }
-    .btnPrimary{
-      background: linear-gradient(135deg, rgba(91,124,250,1), rgba(91,124,250,.75));
-      color:white;
-    }
-    .btnGhost{
-      background: rgba(255,255,255,.08);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,.10);
-    }
-
-    .disclaimer{
-      margin-top: 10px;
-      color: rgba(234,240,255,.65);
-      font-size: 12px;
-      line-height: 1.4;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px dashed rgba(255,255,255,.16);
-      background: rgba(0,0,0,.12);
-    }
-
-    /* Results */
-    .resultStack{ display:grid; gap: 12px; }
-    .highlight{
-      background: radial-gradient(700px 220px at 15% 0%, rgba(91,124,250,.35), transparent 55%),
-                  radial-gradient(700px 240px at 90% 40%, rgba(34,197,94,.22), transparent 60%),
-                  rgba(16,31,54,.55);
-      border: 1px solid rgba(91,124,250,.35);
-      border-radius: 16px;
-      padding: 14px 14px 12px;
-    }
-    .pill{
-      display:inline-flex; align-items:center;
-      padding: 4px 10px; border-radius: 999px;
-      background: rgba(34,197,94,.16);
-      border: 1px solid rgba(34,197,94,.32);
-      color: rgba(220,255,235,.95);
-      font-weight: 900; font-size: 12px;
-      gap:6px;
-    }
-    .moneyBig{ font-size: 34px; font-weight: 950; margin-top: 8px; line-height: 1.05; }
-    .mutedLine{ color: var(--muted); font-size: 13px; margin-top: 6px; }
-
-    .miniCards{
+    .metric .k{ color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.1em; font-weight:800; }
+    .metric .v{ font-size:27px; font-weight:900; margin-top:5px; }
+    .metric .s{ font-size:13px; color:var(--muted); margin-top:6px; }
+    .chartsGrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media (max-width:1060px){ .chartsGrid{ grid-template-columns:1fr; } }
+    .chartCard{
+      background:var(--field);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px;
+      min-height:220px;
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-rows:auto 1fr;
+      gap:8px;
     }
-    @media (max-width: 520px){
-      .miniCards{ grid-template-columns:1fr; }
+    .chartTitle{ font-size:12px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; font-weight:900; }
+    canvas{ width:100%; height:170px; display:block; }
+    .donutWrap{ display:grid; grid-template-columns:130px 1fr; align-items:center; gap:10px; }
+    .donut{
+      width:130px; height:130px; border-radius:50%;
+      background:conic-gradient(var(--lineB) 0deg, var(--lineB) 220deg, var(--lineC) 220deg 360deg);
+      position:relative;
+      margin:auto;
     }
-    .mini{
-      background: rgba(16,31,54,.45);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding: 12px;
+    .donut::after{
+      content:"";
+      position:absolute;
+      inset:18px;
+      border-radius:50%;
+      background:var(--field);
+      border:1px solid var(--border);
     }
-    .mini .k{
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing:.14em;
-    }
-    .mini .v{ margin-top: 6px; font-weight: 950; font-size: 18px; }
-
-    .hidden{ display:none; }
+    .legend{ display:grid; gap:8px; }
+    .legendItem{ display:flex; align-items:center; justify-content:space-between; font-size:13px; color:var(--text); }
+    .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:8px; }
+    .empty{ color:var(--muted); font-size:13px; }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <header>
-      <h1>SIP Calculator</h1>
+    <header class="topBar">
+      <div>
+        <h1>SIP Calculator</h1>
+        <div class="sub">Plan, compare and visualize your investment journey instantly</div>
+      </div>
+      <button class="themeToggle" id="themeToggle" type="button" onclick="toggleTheme()">
+        <span id="themeLabel">Dark mode</span>
+      </button>
     </header>
 
     <div class="grid">
-      <!-- INPUTS -->
       <section class="panel">
         <div class="panelHead">Inputs</div>
         <div class="panelBody">
           <div class="form">
-
-            <!-- Line 1: Lump Sum -->
             <div class="line">
               <div class="field">
                 <label for="lumpSum">Lump Sum</label>
@@ -205,7 +210,6 @@
               </div>
             </div>
 
-            <!-- Line 2: Regular Deposit Amount, Deposit Frequency -->
             <div class="line two">
               <div class="field">
                 <label for="depositAmount">Regular Deposit Amount</label>
@@ -214,7 +218,6 @@
                   <input type="number" id="depositAmount" placeholder="e.g., 2000" min="0" inputmode="decimal" />
                 </div>
               </div>
-
               <div class="field">
                 <label for="depositFreq">Deposit Frequency</label>
                 <select id="depositFreq">
@@ -226,7 +229,6 @@
               </div>
             </div>
 
-            <!-- Line 3: Increase/Decrease, Step-up Unit -->
             <div class="line two">
               <div class="field">
                 <label for="stepUpValue">Increase/Decrease Deposit Every Year</label>
@@ -235,7 +237,6 @@
                   <input type="number" id="stepUpValue" value="0" inputmode="decimal" />
                 </div>
               </div>
-
               <div class="field">
                 <label for="stepUpUnit">Step-up Unit</label>
                 <select id="stepUpUnit">
@@ -245,7 +246,6 @@
               </div>
             </div>
 
-            <!-- Line 4: Term, Term Unit -->
             <div class="line two">
               <div class="field">
                 <label for="termValue">Term</label>
@@ -254,7 +254,6 @@
                   <input type="number" id="termValue" placeholder="e.g., 20" min="0" inputmode="numeric" />
                 </div>
               </div>
-
               <div class="field">
                 <label for="termUnit">Term Unit</label>
                 <select id="termUnit">
@@ -264,7 +263,6 @@
               </div>
             </div>
 
-            <!-- Line 5: Expected Return -->
             <div class="line">
               <div class="field">
                 <label for="rate">Expected Return (%)</label>
@@ -276,43 +274,54 @@
             </div>
 
             <div class="actions">
-              <button class="btnPrimary" onclick="calculateSIP()">Calculate</button>
+              <button class="btnPrimary" onclick="calculateSIP()">Calculate + Graph</button>
               <button class="btnGhost" onclick="resetForm()">Reset</button>
             </div>
-
-          </div>
-
-          <div class="disclaimer">
-            SIP returns are not guaranteed and may vary based on market conditions.
+            <div class="empty">Tip: graphs update instantly after calculate.</div>
           </div>
         </div>
       </section>
 
-      <!-- RESULTS -->
-      <section class="panel">
-        <div class="panelHead">Results</div>
-        <div class="panelBody">
-          <div id="result" class="resultStack hidden">
-            <div class="highlight">
-              <span class="pill">⭐ Maturity Amount</span>
-              <div class="moneyBig" id="maturityText">Rs. 0.00</div>
-              <div class="mutedLine" id="investedHint">Total invested: Rs. 0.00</div>
-            </div>
-
-            <div class="miniCards">
-              <div class="mini">
-                <div class="k">Total Deposits</div>
-                <div class="v" id="depositText">Rs. 0.00</div>
-              </div>
-              <div class="mini">
-                <div class="k">Total Returns</div>
-                <div class="v" id="returnsText">Rs. 0.00</div>
-              </div>
-            </div>
+      <section class="dash">
+        <div class="resultRow">
+          <div class="metric">
+            <div class="k">Maturity Amount</div>
+            <div class="v" id="maturityText">Rs. 0.00</div>
+            <div class="s" id="investedHint">Total invested: Rs. 0.00</div>
           </div>
+          <div class="metric">
+            <div class="k">Total Deposits</div>
+            <div class="v" id="depositText">Rs. 0.00</div>
+          </div>
+          <div class="metric">
+            <div class="k">Total Returns</div>
+            <div class="v" id="returnsText">Rs. 0.00</div>
+          </div>
+        </div>
 
-          <div id="emptyState" class="mutedLine">
-            Enter values and hit <b>Calculate</b>.
+        <div class="chartsGrid">
+          <div class="chartCard">
+            <div class="chartTitle">Investment vs Portfolio Value</div>
+            <canvas id="lineChart" width="580" height="170"></canvas>
+          </div>
+          <div class="chartCard">
+            <div class="chartTitle">Yearly Contribution vs Yearly Growth</div>
+            <canvas id="barChart" width="580" height="170"></canvas>
+          </div>
+          <div class="chartCard">
+            <div class="chartTitle">Deposit Step-up Trend</div>
+            <canvas id="depositTrendChart" width="580" height="170"></canvas>
+          </div>
+          <div class="chartCard">
+            <div class="chartTitle">Portfolio Mix at Maturity</div>
+            <div class="donutWrap">
+              <div class="donut" id="mixDonut"></div>
+              <div class="legend">
+                <div class="legendItem"><span><span class="dot" style="background:var(--lineB)"></span>Invested</span><strong id="donutInvested">Rs. 0.00</strong></div>
+                <div class="legendItem"><span><span class="dot" style="background:var(--lineC)"></span>Returns</span><strong id="donutReturns">Rs. 0.00</strong></div>
+                <div class="legendItem"><span>Returns share</span><strong id="returnShare">0%</strong></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -327,110 +336,249 @@
       }).format(value);
     }
 
-    // frequency -> deposits per year (n) and spacing in months (p)
     function getFrequencyConfig(freq) {
       switch (freq) {
-        case "monthly": return { n: 12, p: 1 };
-        case "quarterly": return { n: 4, p: 3 };
-        case "halfYearly": return { n: 2, p: 6 };
-        case "yearly": return { n: 1, p: 12 };
-        default: return { n: 12, p: 1 };
+        case "monthly": return { p: 1 };
+        case "quarterly": return { p: 3 };
+        case "halfYearly": return { p: 6 };
+        case "yearly": return { p: 12 };
+        default: return { p: 1 };
       }
     }
 
-    // For a full year: deposits at months 0, p, 2p... (n-1)p
-    // average remaining months to end-of-year = 12 - p*(n-1)/2
-    function avgRemainingMonthsFullYear(n, p) {
-      return 12 - (p * (n - 1) / 2);
+    function applyStepUp(value, stepUpValue, stepUpUnit) {
+      if (stepUpUnit === "rupees") return value + stepUpValue;
+      return value * (1 + stepUpValue / 100);
     }
 
-    // Partial year (remMonths): deposits at months 0, p, 2p... < remMonths
-    function depositCountPartial(remMonths, p) {
-      if (remMonths <= 0) return 0;
-      return Math.floor((remMonths - 1) / p) + 1;
-    }
-    function avgRemainingMonthsPartial(remMonths, p) {
-      if (remMonths <= 0) return 0;
-      const count = depositCountPartial(remMonths, p);
-      return remMonths - (p * (count - 1) / 2);
+    function buildProjection(params) {
+      const monthlyRate = params.annualRate / 100 / 12;
+      const points = [];
+      const yearlyBars = [];
+      const depositTrend = [];
+      const freqStep = getFrequencyConfig(params.freq).p;
+
+      let corpus = params.lumpSum;
+      let invested = params.lumpSum;
+      let depPerPeriod = params.depositPerPeriod;
+      let yearDeposit = 0;
+      let yearStartCorpus = corpus;
+
+      points.push({ month: 0, invested, corpus });
+      depositTrend.push({ year: 1, deposit: depPerPeriod });
+
+      for (let m = 1; m <= params.totalMonths; m++) {
+        if ((m - 1) % 12 === 0 && m > 1) {
+          depPerPeriod = Math.max(0, applyStepUp(depPerPeriod, params.stepUpValue, params.stepUpUnit));
+          depositTrend.push({ year: Math.floor((m - 1) / 12) + 1, deposit: depPerPeriod });
+        }
+
+        if ((m - 1) % freqStep === 0) {
+          invested += depPerPeriod;
+          corpus += depPerPeriod;
+          yearDeposit += depPerPeriod;
+        }
+
+        corpus *= (1 + monthlyRate);
+        points.push({ month: m, invested, corpus });
+
+        if (m % 12 === 0 || m === params.totalMonths) {
+          const gain = corpus - yearStartCorpus - yearDeposit;
+          yearlyBars.push({ year: Math.ceil(m / 12), deposit: yearDeposit, gain: Math.max(0, gain) });
+          yearDeposit = 0;
+          yearStartCorpus = corpus;
+        }
+      }
+
+      return { points, yearlyBars, depositTrend, corpus, invested, returns: corpus - invested };
     }
 
-    function applyStepUp(depPerPeriod, stepUpValue, stepUpUnit) {
-      if (stepUpUnit === "rupees") return depPerPeriod + stepUpValue;
-      return depPerPeriod * (1 + stepUpValue / 100);
+    function drawAxes(ctx, width, height, left, top, right, bottom) {
+      ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--chartGrid");
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = top + ((height - top - bottom) * i / 4);
+        ctx.beginPath();
+        ctx.moveTo(left, y);
+        ctx.lineTo(width - right, y);
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(left, top);
+      ctx.lineTo(left, height - bottom);
+      ctx.lineTo(width - right, height - bottom);
+      ctx.stroke();
+    }
+
+    function drawLineGraph(canvasId, seriesA, seriesB) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const pad = { l: 44, t: 14, r: 10, b: 24 };
+      ctx.clearRect(0, 0, w, h);
+      drawAxes(ctx, w, h, pad.l, pad.t, pad.r, pad.b);
+
+      const maxVal = Math.max(...seriesA.map(p => p.y), ...seriesB.map(p => p.y), 1);
+      const maxX = Math.max(seriesA[seriesA.length - 1].x, 1);
+
+      function mapX(x){ return pad.l + (x / maxX) * (w - pad.l - pad.r); }
+      function mapY(y){ return h - pad.b - (y / maxVal) * (h - pad.t - pad.b); }
+
+      ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--lineB");
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      seriesA.forEach((p, i) => i === 0 ? ctx.moveTo(mapX(p.x), mapY(p.y)) : ctx.lineTo(mapX(p.x), mapY(p.y)));
+      ctx.stroke();
+
+      ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--lineA");
+      ctx.beginPath();
+      seriesB.forEach((p, i) => i === 0 ? ctx.moveTo(mapX(p.x), mapY(p.y)) : ctx.lineTo(mapX(p.x), mapY(p.y)));
+      ctx.stroke();
+
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--muted");
+      ctx.font = "11px Inter, system-ui";
+      ctx.fillText("Invested", w - 150, 14);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineB");
+      ctx.fillRect(w - 206, 6, 12, 2);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--muted");
+      ctx.fillText("Portfolio", w - 76, 14);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineA");
+      ctx.fillRect(w - 134, 6, 12, 2);
+    }
+
+    function drawBars(canvasId, bars) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const pad = { l: 40, t: 14, r: 10, b: 26 };
+      ctx.clearRect(0, 0, w, h);
+      drawAxes(ctx, w, h, pad.l, pad.t, pad.r, pad.b);
+
+      const maxVal = Math.max(...bars.map(b => Math.max(b.deposit, b.gain)), 1);
+      const plotW = w - pad.l - pad.r;
+      const slot = plotW / Math.max(bars.length, 1);
+
+      bars.forEach((b, i) => {
+        const x = pad.l + i * slot + slot * 0.18;
+        const barW = slot * 0.26;
+        const yDep = h - pad.b - (b.deposit / maxVal) * (h - pad.t - pad.b);
+        const yGain = h - pad.b - (b.gain / maxVal) * (h - pad.t - pad.b);
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineD");
+        ctx.fillRect(x, yDep, barW, h - pad.b - yDep);
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineC");
+        ctx.fillRect(x + barW + 3, yGain, barW, h - pad.b - yGain);
+      });
+
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--muted");
+      ctx.font = "11px Inter, system-ui";
+      ctx.fillText("Deposit", w - 145, 14);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineD");
+      ctx.fillRect(w - 194, 6, 10, 10);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--muted");
+      ctx.fillText("Growth", w - 68, 14);
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineC");
+      ctx.fillRect(w - 117, 6, 10, 10);
+    }
+
+    function drawDepositTrend(canvasId, values) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      const pad = { l: 40, t: 14, r: 10, b: 24 };
+      ctx.clearRect(0, 0, w, h);
+      drawAxes(ctx, w, h, pad.l, pad.t, pad.r, pad.b);
+
+      const maxVal = Math.max(...values.map(v => v.deposit), 1);
+      const maxX = Math.max(values.length - 1, 1);
+      function mapX(x){ return pad.l + (x / maxX) * (w - pad.l - pad.r); }
+      function mapY(y){ return h - pad.b - (y / maxVal) * (h - pad.t - pad.b); }
+
+      ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--lineA");
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      values.forEach((p, i) => i === 0 ? ctx.moveTo(mapX(i), mapY(p.deposit)) : ctx.lineTo(mapX(i), mapY(p.deposit)));
+      ctx.stroke();
+
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--lineA");
+      values.forEach((p, i) => {
+        ctx.beginPath();
+        ctx.arc(mapX(i), mapY(p.deposit), 2.8, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function updateDonut(invested, returns) {
+      const donut = document.getElementById("mixDonut");
+      const total = Math.max(invested + returns, 1);
+      const investDeg = (invested / total) * 360;
+      donut.style.background = `conic-gradient(var(--lineB) 0deg, var(--lineB) ${investDeg}deg, var(--lineC) ${investDeg}deg 360deg)`;
+      document.getElementById("donutInvested").textContent = formatINR(invested);
+      document.getElementById("donutReturns").textContent = formatINR(returns);
+      document.getElementById("returnShare").textContent = ((returns / total) * 100).toFixed(1) + "%";
+    }
+
+    function updateThemeToggle(isDark) {
+      document.getElementById("themeLabel").textContent = isDark ? "Light mode" : "Dark mode";
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle("dark");
+      localStorage.setItem("sip-theme", isDark ? "dark" : "light");
+      updateThemeToggle(isDark);
+      if (window.lastProjection) renderCharts(window.lastProjection);
+    }
+
+    function initTheme() {
+      const stored = localStorage.getItem("sip-theme");
+      const isDark = stored === "dark";
+      document.body.classList.toggle("dark", isDark);
+      updateThemeToggle(isDark);
+    }
+
+    function renderCharts(projection) {
+      const investedSeries = projection.points.map(p => ({ x: p.month, y: p.invested }));
+      const corpusSeries = projection.points.map(p => ({ x: p.month, y: p.corpus }));
+      drawLineGraph("lineChart", investedSeries, corpusSeries);
+      drawBars("barChart", projection.yearlyBars.slice(0, 12));
+      drawDepositTrend("depositTrendChart", projection.depositTrend.slice(0, 20));
+      updateDonut(projection.invested, projection.returns);
     }
 
     function calculateSIP() {
       const lumpSum = parseFloat(document.getElementById("lumpSum").value) || 0;
-      const depositPerPeriod0 = parseFloat(document.getElementById("depositAmount").value) || 0;
-
+      const depositPerPeriod = parseFloat(document.getElementById("depositAmount").value) || 0;
       const freq = document.getElementById("depositFreq").value;
       const stepUpValue = parseFloat(document.getElementById("stepUpValue").value) || 0;
       const stepUpUnit = document.getElementById("stepUpUnit").value;
-
       const termValue = parseInt(document.getElementById("termValue").value) || 0;
       const termUnit = document.getElementById("termUnit").value;
-
       const annualRate = parseFloat(document.getElementById("rate").value) || 0;
 
-      if (annualRate <= 0 || termValue <= 0 || depositPerPeriod0 <= 0) {
+      if (annualRate <= 0 || termValue <= 0 || depositPerPeriod <= 0) {
         alert("Please enter Regular Deposit Amount, Expected Return (%), and Term.");
         return;
       }
 
-      const { n, p } = getFrequencyConfig(freq);
-      const r = annualRate / 100;
+      const totalMonths = termUnit === "years" ? termValue * 12 : termValue;
+      const projection = buildProjection({
+        lumpSum,
+        depositPerPeriod,
+        freq,
+        stepUpValue,
+        stepUpUnit,
+        annualRate,
+        totalMonths
+      });
 
-      // Convert term into total months
-      const totalMonths = (termUnit === "years") ? (termValue * 12) : termValue;
-      const fullYears = Math.floor(totalMonths / 12);
-      const remMonths = totalMonths % 12;
-
-      // TOTAL DEPOSITS
-      let totalDeposits = lumpSum;
-      let depPerPeriod = depositPerPeriod0;
-
-      for (let y = 0; y < fullYears; y++) {
-        totalDeposits += depPerPeriod * n;
-        depPerPeriod = applyStepUp(depPerPeriod, stepUpValue, stepUpUnit);
-      }
-      if (remMonths > 0) {
-        const cnt = depositCountPartial(remMonths, p);
-        totalDeposits += depPerPeriod * cnt;
-      }
-
-      // CORPUS (APP-STYLE)
-      let corpus = lumpSum;
-      depPerPeriod = depositPerPeriod0;
-
-      for (let y = 0; y < fullYears; y++) {
-        corpus *= (1 + r);
-
-        const avgMonths = avgRemainingMonthsFullYear(n, p);
-        const yearDeposit = depPerPeriod * n;
-        corpus += yearDeposit * (1 + r * (avgMonths / 12));
-
-        depPerPeriod = applyStepUp(depPerPeriod, stepUpValue, stepUpUnit);
-      }
-
-      if (remMonths > 0) {
-        corpus *= (1 + r * (remMonths / 12));
-
-        const cnt = depositCountPartial(remMonths, p);
-        const avgRem = avgRemainingMonthsPartial(remMonths, p);
-        const partDeposit = depPerPeriod * cnt;
-        corpus += partDeposit * (1 + r * (avgRem / 12));
-      }
-
-      const totalReturns = corpus - totalDeposits;
-
-      document.getElementById("result").classList.remove("hidden");
-      document.getElementById("emptyState").classList.add("hidden");
-
-      document.getElementById("maturityText").textContent = formatINR(corpus);
-      document.getElementById("depositText").textContent = formatINR(totalDeposits);
-      document.getElementById("returnsText").textContent = formatINR(totalReturns);
-      document.getElementById("investedHint").textContent = "Total invested: " + formatINR(totalDeposits);
+      window.lastProjection = projection;
+      document.getElementById("maturityText").textContent = formatINR(projection.corpus);
+      document.getElementById("depositText").textContent = formatINR(projection.invested);
+      document.getElementById("returnsText").textContent = formatINR(projection.returns);
+      document.getElementById("investedHint").textContent = "Total invested: " + formatINR(projection.invested);
+      renderCharts(projection);
     }
 
     function resetForm() {
@@ -442,10 +590,19 @@
       document.getElementById("termValue").value = "";
       document.getElementById("termUnit").value = "years";
       document.getElementById("rate").value = "";
-
-      document.getElementById("result").classList.add("hidden");
-      document.getElementById("emptyState").classList.remove("hidden");
+      window.lastProjection = null;
+      document.getElementById("maturityText").textContent = "Rs. 0.00";
+      document.getElementById("depositText").textContent = "Rs. 0.00";
+      document.getElementById("returnsText").textContent = "Rs. 0.00";
+      document.getElementById("investedHint").textContent = "Total invested: Rs. 0.00";
+      updateDonut(0, 0);
+      drawLineGraph("lineChart", [{x:0,y:0},{x:1,y:0}], [{x:0,y:0},{x:1,y:0}]);
+      drawBars("barChart", [{year:1,deposit:0,gain:0}]);
+      drawDepositTrend("depositTrendChart", [{year:1,deposit:0},{year:2,deposit:0}]);
     }
+
+    initTheme();
+    resetForm();
   </script>
 </body>
 </html>
